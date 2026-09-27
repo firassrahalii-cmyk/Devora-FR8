@@ -1,0 +1,224 @@
+(function () {
+  "use strict";
+
+  const HIDDEN = "hidden";
+  function hide(el) { if (el) el.classList.add(HIDDEN); }
+  function show(el) { if (el) el.classList.remove(HIDDEN); }
+
+  /* ── Global closeModal (called by inline onclick in HTML) ── */
+  window.closeModal = function (id) {
+    var m = document.getElementById(id);
+    if (!m) return;
+    m.classList.remove("show");
+    setTimeout(function () { m.style.display = "none"; }, 300);
+  };
+
+  window.openModal = function (id) {
+    var m = document.getElementById(id);
+    if (!m) return;
+    m.style.display = "flex";
+    requestAnimationFrame(function () { m.classList.add("show"); });
+  };
+
+  /* ── Data Layer ──────────────────────────────────────── */
+  function getUsers() { try { return JSON.parse(localStorage.getItem("devora_users")) || []; } catch { return []; } }
+  function saveUsers(users) { localStorage.setItem("devora_users", JSON.stringify(users)); }
+  function getCurrentUserEmail() { try { return JSON.parse(localStorage.getItem("devora_current_user")); } catch { return null; } }
+
+  function getFullUser() {
+    var emailOrObj = getCurrentUserEmail();
+    if (!emailOrObj) return null;
+    var email = typeof emailOrObj === "object" ? emailOrObj.email : emailOrObj;
+    var users = getUsers();
+    return users.find(function (u) { return u.email === email; }) || null;
+  }
+
+  function saveUser(user) {
+    var users = getUsers();
+    var idx = users.findIndex(function (u) { return u.email === user.email; });
+    if (idx !== -1) { users[idx] = user; saveUsers(users); }
+  }
+
+  /* ── Navigation ──────────────────────────────────────── */
+  var navItems = document.querySelectorAll(".nav-item[data-section]");
+  var dashboardSection = document.getElementById("dashboardSection");
+  var projectsSection = document.getElementById("projectsSection");
+  var arenaSection = document.getElementById("arenaSection");
+  var aiSection = document.getElementById("aiSection");
+  var cyberSection = document.getElementById("cyberSection");
+  var profileDropdown = document.getElementById("profileDropdown");
+  var profileTrigger = document.getElementById("profileTrigger");
+
+  function switchSection(section) {
+    navItems.forEach(function (i) { i.classList.remove("active"); if (i.getAttribute("data-section") === section) i.classList.add("active"); });
+    if (dashboardSection) { section === "dashboard" ? show(dashboardSection) : hide(dashboardSection); }
+    if (projectsSection) { section === "projects" ? show(projectsSection) : hide(projectsSection); }
+    if (arenaSection) { section === "arena" ? show(arenaSection) : hide(arenaSection); }
+    if (aiSection) { section === "ai" ? show(aiSection) : hide(aiSection); }
+    if (cyberSection) { section === "cyber" ? show(cyberSection) : hide(cyberSection); }
+  }
+
+  navItems.forEach(function (item) {
+    item.addEventListener("click", function () {
+      switchSection(item.getAttribute("data-section"));
+    });
+  });
+
+  /* ── Profile Dropdown Toggle ─────────────────────────── */
+  if (profileTrigger) {
+    profileTrigger.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (profileDropdown) {
+        profileDropdown.classList.toggle("hidden");
+        profileDropdown.classList.toggle("show");
+      }
+    });
+  }
+  document.addEventListener("click", function (e) {
+    if (profileDropdown && !profileDropdown.contains(e.target) && (!profileTrigger || !profileTrigger.contains(e.target))) {
+      profileDropdown.classList.add("hidden");
+      profileDropdown.classList.remove("show");
+    }
+  });
+
+  /* ── Modal overlay click to close ────────────────────── */
+  document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("modal-overlay") && e.target.classList.contains("show")) {
+      e.target.classList.remove("show");
+      setTimeout(function () { e.target.style.display = "none"; }, 300);
+    }
+  });
+
+  /* ── Modal close buttons (X) ─────────────────────────── */
+  document.querySelectorAll(".modal-close").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var m = btn.closest(".modal-overlay");
+      if (m) { m.classList.remove("show"); setTimeout(function () { m.style.display = "none"; }, 300); }
+    });
+  });
+
+  /* ── Toast ───────────────────────────────────────────── */
+  window.showToast = function (msg, type, duration) {
+    type = type || "success";
+    duration = duration || 3000;
+    var t = document.createElement("div");
+    t.className = "toast " + type;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function () { t.classList.add("show"); }, 10);
+    setTimeout(function () { t.classList.remove("show"); setTimeout(function () { t.remove(); }, 300); }, duration);
+  };
+
+  /* ── Profile Display ─────────────────────────────────── */
+  function refreshProfileDisplay() {
+    var user = getFullUser();
+    if (!user) return;
+    var sidebarLetter = document.getElementById("sidebarLetter");
+    var sidebarUsername = document.getElementById("sidebarUsername");
+    if (sidebarLetter) sidebarLetter.textContent = (user.username || user.email)[0].toUpperCase();
+    if (sidebarUsername) sidebarUsername.textContent = user.username || "user";
+  }
+
+  /* ── Edit Profile ────────────────────────────────────── */
+  function initEditProfile() {
+    var saveBtn = document.querySelector("#editProfileModal .btn-save");
+    var cancelBtn = document.querySelector("#editProfileModal .btn-cancel");
+    if (!saveBtn) return;
+
+    saveBtn.addEventListener("click", function () {
+      var user = getFullUser();
+      if (!user) return;
+      var username = (document.getElementById("edit-username") || {}).value || "";
+      var name = (document.getElementById("edit-name") || {}).value || "";
+      var description = (document.getElementById("edit-description") || {}).value || "";
+      var bio = (document.getElementById("edit-bio") || {}).value || "";
+      username = username.trim().toLowerCase();
+      name = name.trim();
+
+      if (!username || !name) { window.showToast("Username and Name are required", "error"); return; }
+      if (username.length < 4) { window.showToast("Username must be at least 4 characters", "error"); return; }
+      if (!/^[a-z][a-z0-9_]*$/.test(username)) { window.showToast("Username: lowercase letters, numbers, underscores only", "error"); return; }
+      if (name.split(/\s+/).length > 18) { window.showToast("Name must be 18 words or fewer", "error"); return; }
+
+      var users = getUsers();
+      var duplicate = users.find(function (u) { return u.email !== user.email && u.username === username; });
+      if (duplicate) { window.showToast("Username already taken", "error"); return; }
+
+      user.username = username;
+      user.name = name;
+      user.description = description;
+      user.bio = bio;
+      saveUser(user);
+
+      var raw = localStorage.getItem("devora_current_user");
+      try {
+        var parsed = JSON.parse(raw);
+        if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
+          parsed.username = username;
+          parsed.name = name;
+          localStorage.setItem("devora_current_user", JSON.stringify(parsed));
+        }
+      } catch (e) {}
+
+      refreshProfileDisplay();
+      window.closeModal("editProfileModal");
+      window.showToast("Profile updated!");
+    });
+
+    if (cancelBtn) cancelBtn.addEventListener("click", function () { window.closeModal("editProfileModal"); });
+  }
+
+  function openEditProfile() {
+    var user = getFullUser();
+    if (!user) return;
+    var u = document.getElementById("edit-username");
+    var n = document.getElementById("edit-name");
+    var d = document.getElementById("edit-description");
+    var b = document.getElementById("edit-bio");
+    if (u) u.value = user.username || "";
+    if (n) n.value = user.name || "";
+    if (d) d.value = user.description || "";
+    if (b) b.value = user.bio || "";
+    window.openModal("editProfileModal");
+  }
+
+  function openViewProfile() {
+    var user = getFullUser();
+    if (!user) return;
+    var initial = (user.username || user.email)[0].toUpperCase();
+    var avatar = document.getElementById("profileAvatarLg");
+    var uname = document.getElementById("profile-username");
+    var name = document.getElementById("profile-name");
+    var desc = document.getElementById("profile-description");
+    var bio = document.getElementById("profile-bio");
+    if (avatar) avatar.textContent = initial;
+    if (uname) uname.textContent = "@" + (user.username || "unknown");
+    if (name) name.textContent = user.name || "No name";
+    if (desc) desc.textContent = user.description || "No description";
+    if (bio) bio.textContent = user.bio || "No bio";
+    window.openModal("profileModal");
+  }
+
+  /* ── Profile Dropdown Actions ────────────────────────── */
+  document.querySelectorAll("[data-action]").forEach(function (el) {
+    el.addEventListener("click", function (e) {
+      e.preventDefault();
+      var action = el.getAttribute("data-action");
+      if (profileDropdown) { profileDropdown.classList.add("hidden"); profileDropdown.classList.remove("show"); }
+      if (action === "edit-profile") openEditProfile();
+      else if (action === "view-profile") openViewProfile();
+      else if (action === "logout") {
+        localStorage.removeItem("devora_current_user");
+        hide(document.getElementById("appSection"));
+        show(document.getElementById("authSection"));
+        location.reload();
+      }
+    });
+  });
+
+  /* ── Init ────────────────────────────────────────────── */
+  document.addEventListener("DOMContentLoaded", function () {
+    refreshProfileDisplay();
+    initEditProfile();
+  });
+})();

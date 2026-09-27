@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Devora</title>
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ANIMATED STARS -->
+  <canvas id="starsCanvas"></canvas>
+
+  <!-- ==================== AUTH SECTION ==================== -->
+  <div id="authSection">
+    <canvas id="particleCanvas"></canvas>
+
+    <div class="auth-wrapper">
+      <div class="auth-card-container">
+
+        <!-- LOGIN CARD -->
+        <div id="loginCard" class="auth-card">
+          <div class="auth-logo">
+            <img src="images/devora-logo.svg" alt="Devora" class="auth-logo-img">
+          </div>
+          <h1 class="auth-title">Devora</h1>
+          <p class="auth-subtitle">Welcome back! Sign in to continue.</p>
+
+          <div id="loginError" class="error-message hidden"></div>
+
+          <form id="loginForm" class="auth-form" autocomplete="off">
+            <div class="field-group">
+              <label for="loginEmail">Email</label>
+              <div class="input-wrapper">
+                <input type="email" id="loginEmail" placeholder="yourname@gmail.com" required>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="loginPassword">Password</label>
+              <div class="input-wrapper">
+                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                <button type="button" class="toggle-pass" data-target="loginPassword">
+                  <svg class="icon-eye" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="auth-btn">
+              <span class="btn-text">Sign In</span>
+              <span class="spinner"></span>
+            </button>
+          </form>
+
+          <div class="auth-switch">
+            Don't have an account? <a href="#" id="showRegister">Create Account</a>
+          </div>
+        </div>
+
+        <!-- REGISTER CARD -->
+        <div id="registerCard" class="auth-card hidden">
+          <div class="auth-logo">
+            <img src="images/devora-logo.svg" alt="Devora" class="auth-logo-img">
+          </div>
+          <h1 class="auth-title">Devora</h1>
+          <p class="auth-subtitle">Create your account to get started.</p>
+
+          <div id="registerError" class="error-message hidden"></div>
+
+          <form id="registerForm" class="auth-form" autocomplete="off">
+            <div class="field-group">
+              <label for="regEmail">Email</label>
+              <div class="input-wrapper">
+                <input type="email" id="regEmail" placeholder="yourname@gmail.com" required>
+              </div>
+              <span id="emailError" class="field-error hidden"></span>
+            </div>
+
+            <div class="field-group">
+              <label for="regPassword">Password</label>
+              <div class="input-wrapper">
+                <input type="password" id="regPassword" placeholder="Create a password" required>
+                <button type="button" class="toggle-pass" data-target="regPassword">
+                  <svg class="icon-eye" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+              <ul class="password-requirements">
+                <li id="reqLength"><span class="req-icon">✗</span> At least 8 characters</li>
+                <li id="reqCapital"><span class="req-icon">✗</span> One uppercase letter</li>
+                <li id="reqNumber"><span class="req-icon">✗</span> One number</li>
+              </ul>
+            </div>
+
+            <div class="field-group">
+              <label for="regConfirmPassword">Confirm Password</label>
+              <div class="input-wrapper">
+                <input type="password" id="regConfirmPassword" placeholder="Confirm your password" required>
+                <button type="button" class="toggle-pass" data-target="regConfirmPassword">
+                  <svg class="icon-eye" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+              <span id="confirmError" class="field-error hidden"></span>
+            </div>
+
+            <div class="field-group">
+              <label for="regUsername">Username</label>
+              <div class="input-wrapper">
+                <input type="text" id="regUsername" placeholder="e.g. ahmed_lolo" required>
+              </div>
+              <span class="field-hint">Lowercase letters, numbers, and underscores only.</span>
+              <span id="usernameError" class="field-error hidden"></span>
+            </div>
+
+            <div class="field-group">
+              <label for="regName">Name</label>
+              <div class="input-wrapper">
+                <input type="text" id="regName" placeholder="Your display name" required>
+              </div>
+              <span class="field-hint">Max 18 words.</span>
+              <span id="nameError" class="field-error hidden"></span>
+            </div>
+
+            <button type="submit" class="auth-btn">
+              <span class="btn-text">Create Account</span>
+              <span class="spinner"></span>
+            </button>
+          </form>
+
+          <div class="auth-switch">
+            Already have an account? <a href="#" id="showLogin">Sign In</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== APP SECTION ==================== -->
+  <div id="appSection" class="hidden">
+    <div class="app-layout">
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="logo-wrapper">
+            <img src="images/devora-logo.svg" alt="Devora" class="logo-img">
+          </div>
+          <span class="logo-text">Devora</span>
+        </div>
+
+        <nav class="sidebar-nav">
+          <div class="nav-item active" data-section="dashboard">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+              </svg>
+            </span>
+            <span>Dashboard</span>
+          </div>
+          <div class="nav-item" data-section="projects">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+            </span>
+            <span>Projects</span>
+          </div>
+          <div class="nav-item" data-section="arena">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </span>
+            <span>Dev Arena</span>
+          </div>
+          <div class="nav-item" data-section="ai">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a4 4 0 0 1 4 4v1a2 2 0 0 1 2 2h1a3 3 0 0 1 3 3v1a3 3 0 0 1-3 3h-1a2 2 0 0 1-2 2v1a4 4 0 0 1-8 0v-1a2 2 0 0 1-2-2h-1a3 3 0 0 1-3-3v-1a3 3 0 0 1 3-3h1a2 2 0 0 1 2-2V6a4 4 0 0 1 4-4z"/>
+                <circle cx="9" cy="12" r="1" fill="currentColor"/>
+                <circle cx="15" cy="12" r="1" fill="currentColor"/>
+              </svg>
+            </span>
+            <span>Devora AI</span>
+          </div>
+          <div class="nav-item" data-section="messenger">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </span>
+            <span>Mess Devora</span>
+          </div>
+          <div class="nav-item" data-section="disvora">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+              </svg>
+            </span>
+            <span>Disvora</span>
+          </div>
+          <div class="nav-item" data-section="cyber">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </span>
+            <span>Cybersecurity</span>
+          </div>
+          <div class="nav-item" data-section="games">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="6" width="20" height="12" rx="2"/>
+                <line x1="6" y1="10" x2="6" y2="14"/>
+                <line x1="4" y1="12" x2="8" y2="12"/>
+                <circle cx="15" cy="11" r="1" fill="currentColor"/>
+                <circle cx="17" cy="13" r="1" fill="currentColor"/>
+              </svg>
+            </span>
+            <span>Devora Games</span>
+          </div>
+          <div class="nav-item" data-section="suggestions">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </span>
+            <span>Suggestions</span>
+          </div>
+          <div id="vipNavGroup" style="display:none">
+            <div class="vip-nav-header">
+              <span class="vip-nav-title">Devora VIP</span>
+              <div class="vip-nav-line"></div>
+              <span class="nav-item vip-nav-subtitle" data-section="vip">VIP Scripts</span>
+            </div>
+          </div>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="management-nav-item" id="managementNavItem" data-section="management" style="display:none">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </span>
+            <span>Management</span>
+          </div>
+          <div class="profile-trigger" id="profileTrigger">
+            <div class="profile-avatar">
+              <span class="profile-letter" id="sidebarLetter">D</span>
+            </div>
+            <span class="profile-name" id="sidebarUsername">user</span>
+            <span class="vip-badge" id="vipProfileBadge" style="display:none" title="Devora VIP">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </span>
+          </div>
+          <div class="profile-dropdown hidden" id="profileDropdown">
+            <a href="#" data-action="edit-profile">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit Profile
+            </a>
+            <a href="#" data-action="view-profile">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              View Profile
+            </a>
+            <a href="#" data-action="logout">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Logout
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- SIDEBAR OVERLAY (mobile) -->
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <div class="topbar">
+          <button class="hamburger-btn" id="hamburgerBtn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <span class="topbar-title" id="topbarTitle">Dashboard</span>
+          <button class="vip-btn-topbar" id="vipBtnTopbar" onclick="openVipModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            <span>Get VIP</span>
+          </button>
+        </div>
+
+        <div class="content-area">
+
+          <!-- ========== DASHBOARD ========== -->
+          <div id="dashboardSection">
+            <div class="welcome-card">
+              <button class="admin-secret-btn" id="adminSecretBtn" title="Admin Access">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </button>
+              <div class="welcome-glow"></div>
+              <div class="welcome-content">
+                <div class="welcome-badge">Developer Platform</div>
+                <h1>Welcome to <span class="welcome-brand">Devora</span></h1>
+                <p>Your all-in-one platform for developers and cybersecurity enthusiasts. Learn, build, and grow.</p>
+                <div class="welcome-actions">
+                  <button class="welcome-btn primary" onclick="document.querySelector('[data-section=arena]').click()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    Start Coding
+                  </button>
+                  <button class="welcome-btn secondary" onclick="document.querySelector('[data-section=projects]').click()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                    Browse Projects
+                  </button>
+                </div>
+              </div>
+              <div class="welcome-visual">
+                <div class="welcome-code-block">
+                  <div class="code-dots"><span></span><span></span><span></span></div>
+                  <pre><code><span class="code-kw">function</span> <span class="code-fn">buildFuture</span>() {
+  <span class="code-kw">const</span> skills = <span class="code-str">learn()</span>;
+  <span class="code-kw">const</span> projects = <span class="code-str">create()</span>;
+  <span class="code-kw">return</span> skills + projects;
+}</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="features-grid">
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </div>
+                <h3>Dev Arena</h3>
+                <p>Challenge yourself across 22 programming languages with 220+ curated problems.</p>
+                <div class="feature-stat">
+                  <span class="stat-number">220+</span>
+                  <span class="stat-label">Challenges</span>
+                </div>
+              </div>
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <h3>Projects</h3>
+                <p>Showcase your work, get feedback, and discover what others are building.</p>
+                <div class="feature-stat">
+                  <span class="stat-number">∞</span>
+                  <span class="stat-label">Possibilities</span>
+                </div>
+              </div>
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3>Community</h3>
+                <p>Join developers worldwide. Share knowledge, collaborate, and grow together.</p>
+                <div class="feature-stat">
+                  <span class="stat-number">22</span>
+                  <span class="stat-label">Languages</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- VIP SECTION -->
+            <div class="vip-section">
+              <div class="vip-card-dashboard">
+                <div class="vip-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                </div>
+                <div class="vip-card-content">
+                  <h3>Devora VIP</h3>
+                  <p>Unlock the full power of Devora. Get exclusive access to premium scripts, advanced programming tutorials, in-depth courses, priority support, and a growing library of resources designed to accelerate your development journey.</p>
+                  <button class="vip-btn-dashboard" onclick="openVipModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    Get VIP
+                  </button>
+                </div>
+              </div>
+
+              <!-- SECRET PASSWORD -->
+              <div class="secret-password-card">
+                <div class="secret-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </div>
+                <div class="secret-content">
+                  <h4>Have a Secret Code?</h4>
+                  <p>Enter the secret password to unlock Devora VIP for free.</p>
+                  <div class="secret-input-group">
+                    <input type="password" id="secretPasswordInput" placeholder="Write Secret Password" class="secret-input">
+                    <button id="secretPasswordBtn" class="secret-btn">Unlock</button>
+                  </div>
+                  <p id="secretPasswordMsg" class="secret-msg"></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="discord-section">
+              <div class="discord-content">
+                <div class="discord-icon-wrap">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                  </svg>
+                </div>
+                <div class="discord-text">
+                  <h3>Join our Discord</h3>
+                  <p>Connect with developers, share knowledge, and grow together.</p>
+                </div>
+              </div>
+              <a href="https://discord.gg/f2DFQPZKX" target="_blank" rel="noopener noreferrer" class="discord-btn">
+                Join Server
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- ========== MANAGEMENT ========== -->
+          <div id="managementSection" class="hidden">
+            <div class="management-header">
+              <div>
+                <h1>Management</h1>
+                <p class="management-subtitle">View and manage all users, roles, and site data</p>
+              </div>
+              <div class="management-role-badge" id="managementRoleBadge">Admin</div>
+            </div>
+
+            <div class="management-stats-row">
+              <div class="mgt-stat-card">
+                <div class="mgt-stat-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="mgt-stat-info">
+                  <span class="mgt-stat-number" id="mgtTotalUsers">0</span>
+                  <span class="mgt-stat-label">Total Users</span>
+                </div>
+              </div>
+              <div class="mgt-stat-card">
+                <div class="mgt-stat-icon vip">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <div class="mgt-stat-info">
+                  <span class="mgt-stat-number" id="mgtTotalVip">0</span>
+                  <span class="mgt-stat-label">VIP Members</span>
+                </div>
+              </div>
+              <div class="mgt-stat-card">
+                <div class="mgt-stat-icon admin">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div class="mgt-stat-info">
+                  <span class="mgt-stat-number" id="mgtTotalAdmins">0</span>
+                  <span class="mgt-stat-label">Admins</span>
+                </div>
+              </div>
+              <div class="mgt-stat-card">
+                <div class="mgt-stat-icon arena">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <div class="mgt-stat-info">
+                  <span class="mgt-stat-number" id="mgtTotalScore">0</span>
+                  <span class="mgt-stat-label">Total Arena Score</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="management-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="mgtSearchInput" placeholder="Search users by name, username, or email..." autocomplete="off">
+            </div>
+
+            <div class="management-table-wrap">
+              <table class="management-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th class="mgt-pw-header" style="display:none">Password</th>
+                    <th>Role</th>
+                    <th>VIP</th>
+                    <th>Arena Score</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="mgtUsersBody"></tbody>
+              </table>
+              <div class="mgt-empty" id="mgtEmptyState" style="display:none">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <h3>No users found</h3>
+              </div>
+            </div>
+
+            <!-- Owner Settings (passwords) -->
+            <div class="mgt-settings-section" id="mgtOwnerSettings" style="display:none">
+              <div class="mgt-settings-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                  <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                <h2>Owner Settings</h2>
+              </div>
+              <p class="mgt-settings-desc">Change the secret passwords for Admin, Owner, and VIP access. Only visible to the Owner.</p>
+
+              <div class="mgt-password-cards">
+                <div class="mgt-pw-card">
+                  <div class="mgt-pw-card-header">
+                    <div class="mgt-pw-icon admin">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h3>Admin Password</h3>
+                      <p>Grants Admin role when entered in the secret login</p>
+                    </div>
+                  </div>
+                  <div class="mgt-pw-input-row">
+                    <input type="password" id="mgtAdminPwInput" placeholder="Enter new admin password..." autocomplete="off">
+                    <button type="button" class="mgt-pw-toggle" data-target="mgtAdminPwInput">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                  </div>
+                  <button class="btn-primary mgt-pw-save" id="mgtSaveAdminPw">Save Admin Password</button>
+                </div>
+
+                <div class="mgt-pw-card">
+                  <div class="mgt-pw-card-header">
+                    <div class="mgt-pw-icon owner">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h3>Owner Password</h3>
+                      <p>Grants full Owner permissions including kick and VIP management</p>
+                    </div>
+                  </div>
+                  <div class="mgt-pw-input-row">
+                    <input type="password" id="mgtOwnerPwInput" placeholder="Enter new owner password..." autocomplete="off">
+                    <button type="button" class="mgt-pw-toggle" data-target="mgtOwnerPwInput">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                  </div>
+                  <button class="btn-primary mgt-pw-save" id="mgtSaveOwnerPw">Save Owner Password</button>
+                </div>
+
+                <div class="mgt-pw-card">
+                  <div class="mgt-pw-card-header">
+                    <div class="mgt-pw-icon vip">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h3>VIP Secret Password</h3>
+                      <p>Required to unlock VIP scripts download access</p>
+                    </div>
+                  </div>
+                  <div class="mgt-pw-input-row">
+                    <input type="password" id="mgtVipPwInput" placeholder="Enter new VIP password..." autocomplete="off">
+                    <button type="button" class="mgt-pw-toggle" data-target="mgtVipPwInput">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                  </div>
+                  <button class="btn-primary mgt-pw-save" id="mgtSaveVipPw">Save VIP Password</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ========== MESS DEVORA ========== -->
+          <div id="messengerSection" class="hidden">
+            <div class="msg-layout">
+              <!-- Left Panel: Contacts -->
+              <div class="msg-contacts">
+                <div class="msg-contacts-header">
+                  <h2>Mess Devora</h2>
+                  <div class="msg-header-actions">
+                    <button class="msg-icon-btn" id="msgFriendRequestsBtn" title="Friend Requests">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                      <span class="msg-badge" id="msgFriendReqBadge" style="display:none">0</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="msg-search">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  <input type="text" id="msgSearchInput" placeholder="Search users..." autocomplete="off">
+                </div>
+                <div class="msg-tabs">
+                  <button class="msg-tab active" data-tab="friends">Friends</button>
+                  <button class="msg-tab" data-tab="strangers">Strangers</button>
+                </div>
+                <div class="msg-contact-list" id="msgContactList">
+                  <div class="msg-empty-state" id="msgEmptyFriends">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <p>No friends yet</p>
+                    <span>Search for users to add as friends</span>
+                  </div>
+                  <div class="msg-empty-state" id="msgEmptyStrangers" style="display:none">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <p>No users found</p>
+                    <span>Try a different search term</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Panel: Chat -->
+              <div class="msg-chat" id="msgChatPanel">
+                <div class="msg-chat-empty" id="msgChatEmpty">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <h3>Select a conversation</h3>
+                  <p>Choose a friend or start a new conversation</p>
+                </div>
+                <div class="msg-chat-active" id="msgChatActive" style="display:none">
+                  <div class="msg-chat-header" id="msgChatHeader">
+                    <button class="msg-back-btn" id="msgBackBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
+                    <div class="msg-chat-user" id="msgChatUser">
+                      <div class="msg-chat-avatar" id="msgChatAvatar">U</div>
+                      <div class="msg-chat-info">
+                        <span class="msg-chat-name" id="msgChatName">User</span>
+                        <span class="msg-chat-status" id="msgChatStatus">Offline</span>
+                      </div>
+                    </div>
+                    <div class="msg-chat-actions">
+                      <button class="msg-icon-btn" id="msgViewProfileBtn" title="View Profile">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="msg-messages" id="msgMessages"></div>
+                  <div class="msg-input-area">
+                    <button class="msg-icon-btn" id="msgEmojiBtn" title="Emoji">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                    </button>
+                    <div class="msg-emoji-picker" id="msgEmojiPicker" style="display:none">
+                      <div class="msg-emoji-grid" id="msgEmojiGrid"></div>
+                    </div>
+                    <button class="msg-icon-btn" id="msgFileBtn" title="Attach File">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    </button>
+                    <input type="file" id="msgFileInput" style="display:none">
+                    <input type="text" id="msgInput" placeholder="Type a message..." autocomplete="off">
+                    <button class="msg-send-btn" id="msgSendBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Friend Requests Panel -->
+          <div class="msg-requests-panel hidden" id="msgRequestsPanel">
+            <div class="msg-requests-header">
+              <button class="msg-back-btn" id="msgRequestsBackBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <h3>Friend Requests</h3>
+            </div>
+            <div class="msg-requests-list" id="msgRequestsList">
+              <div class="msg-empty-state" id="msgEmptyRequests">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                <p>No friend requests</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Profile Modal (for messenger) -->
+          <div id="msgProfileModal" class="modal-overlay">
+            <div class="modal-content msg-profile-modal">
+              <button class="modal-close" onclick="closeModal('msgProfileModal')">&times;</button>
+              <div class="msg-profile-header">
+                <div class="msg-profile-avatar" id="msgProfileAvatar">U</div>
+                <h3 id="msgProfileName">User</h3>
+                <p id="msgProfileUsername">@user</p>
+              </div>
+              <div class="msg-profile-info">
+                <div class="msg-profile-field"><label>Email</label><span id="msgProfileEmail">-</span></div>
+                <div class="msg-profile-field"><label>Joined</label><span id="msgProfileJoined">-</span></div>
+                <div class="msg-profile-field"><label>Arena Score</label><span id="msgProfileScore">0</span></div>
+                <div class="msg-profile-field"><label>Bio</label><span id="msgProfileBio">Not set</span></div>
+              </div>
+              <div class="msg-profile-actions" id="msgProfileActions"></div>
+            </div>
+          </div>
+
+          <!-- ========== DISVORA ========== -->
+          <div id="disvoraSection" class="hidden">
+            <div style="padding:12px 20px;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:var(--r-md);margin-bottom:16px;display:flex;align-items:center;gap:10px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" width="20" height="20" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <div>
+                <span style="font-size:13px;font-weight:700;color:#fbbf24">Development Incomplete</span>
+                <span style="font-size:12px;color:var(--text-3);margin-left:6px">Disvora is still under construction. Most features are a preview of the final concept. More than half of the work is still remaining.</span>
+              </div>
+            </div>
+            <div class="dv-layout">
+              <!-- Server List (left narrow bar) -->
+              <div class="dv-server-list">
+                <div class="dv-server-item dv-home" data-server="home" title="Direct Messages">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                </div>
+                <div class="dv-server-separator"></div>
+                <div id="dvServerList"></div>
+                <div class="dv-server-item dv-add-server" id="dvAddServerBtn" title="Create a Server">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </div>
+                <div class="dv-server-item dv-explore-server" id="dvExploreBtn" title="Explore Servers">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+              </div>
+
+              <!-- Channel Sidebar -->
+              <div class="dv-channels" id="dvChannels">
+                <div class="dv-channels-header" id="dvChannelsHeader">
+                  <span class="dv-server-title" id="dvServerTitle">Disvora</span>
+                  <button class="dv-icon-btn" id="dvServerSettingsBtn" title="Server Settings" style="display:none">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                  </button>
+                </div>
+                <div class="dv-channel-list" id="dvChannelList"></div>
+                <div class="dv-user-panel">
+                  <div class="dv-user-avatar" id="dvUserAvatar">U</div>
+                  <div class="dv-user-info">
+                    <span class="dv-user-name" id="dvUserName">User</span>
+                    <span class="dv-user-tag" id="dvUserTag">#0001</span>
+                  </div>
+                </div>
+                <div class="dv-voice-panel" id="dvVoicePanel" style="display:none">
+                  <div class="dv-voice-header">
+                    <span class="dv-voice-status">Voice Connected</span>
+                    <button class="dv-voice-disconnect" id="dvVoiceDisconnect" title="Disconnect">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.56 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                    </button>
+                  </div>
+                  <div class="dv-voice-controls">
+                    <button class="dv-voice-ctrl" id="dvMuteBtn" title="Mute">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                    </button>
+                    <button class="dv-voice-ctrl" id="dvDeafenBtn" title="Deafen">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                    </button>
+                    <button class="dv-voice-ctrl" id="dvMuteServerBtn" title="Mute Server">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                    </button>
+                  </div>
+                  <div class="dv-voice-users" id="dvVoiceUsers"></div>
+                </div>
+              </div>
+
+              <!-- Main Chat Area -->
+              <div class="dv-main">
+                <div class="dv-main-header" id="dvMainHeader">
+                  <span class="dv-main-channel-name" id="dvChannelName">general</span>
+                  <div class="dv-main-actions">
+                    <button class="dv-icon-btn" id="dvMembersToggle" title="Show Server Members">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="dv-messages" id="dvMessages">
+                  <div class="dv-welcome-msg">
+                    <h3>Welcome to #general!</h3>
+                    <p>This is the start of the channel.</p>
+                  </div>
+                </div>
+                <div class="dv-input-area">
+                  <input type="text" id="dvMessageInput" placeholder="Message #general" autocomplete="off">
+                  <button class="dv-send-btn" id="dvSendBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Members Panel -->
+              <div class="dv-members" id="dvMembers">
+                <div class="dv-members-list" id="dvMembersList"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Disvora Modals -->
+          <!-- Create Server Modal -->
+          <div id="dvCreateServerModal" class="modal-overlay">
+            <div class="modal-content dv-modal">
+              <h2>Create a Server</h2>
+              <p style="color:var(--text-3);margin-bottom:20px;font-size:14px">Your server is where you and your friends hang out.</p>
+              <form id="dvCreateServerForm">
+                <label style="font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block">Server Name</label>
+                <input type="text" id="dvServerNameInput" placeholder="My Awesome Server" style="width:100%;padding:10px 14px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text-1);font-size:14px;outline:none;margin-bottom:12px;box-sizing:border-box" required>
+                <label style="font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block">Description (optional)</label>
+                <input type="text" id="dvServerDescInput" placeholder="A cool server for..." style="width:100%;padding:10px 14px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text-1);font-size:14px;outline:none;margin-bottom:20px;box-sizing:border-box">
+                <div class="modal-actions">
+                  <button type="button" class="btn-secondary" onclick="closeModal('dvCreateServerModal')">Cancel</button>
+                  <button type="submit" class="btn-primary">Create</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Explore Servers Modal -->
+          <div id="dvExploreModal" class="modal-overlay">
+            <div class="modal-content dv-modal" style="max-width:600px">
+              <h2>Explore Servers</h2>
+              <p style="color:var(--text-3);margin-bottom:20px;font-size:14px">Join a server to start chatting</p>
+              <div id="dvExploreList" class="dv-explore-list"></div>
+              <div class="modal-actions"><button type="button" class="btn-secondary" onclick="closeModal('dvExploreModal')">Close</button></div>
+            </div>
+          </div>
+
+          <!-- Server Settings Modal -->
+          <div id="dvServerSettingsModal" class="modal-overlay">
+            <div class="modal-content dv-settings-modal">
+              <div class="dv-settings-layout">
+                <div class="dv-settings-sidebar">
+                  <h3>Server Settings</h3>
+                  <div class="dv-settings-nav">
+                    <button class="dv-settings-tab active" data-stab="overview">Overview</button>
+                    <button class="dv-settings-tab" data-stab="roles">Roles</button>
+                  </div>
+                </div>
+                <div class="dv-settings-content" id="dvSettingsContent">
+                  <div id="dvSettingsOverview">
+                    <h3>Overview</h3>
+                    <label style="font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block">Server Name</label>
+                    <input type="text" id="dvSettingsNameInput" style="width:100%;padding:10px 14px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text-1);font-size:14px;outline:none;margin-bottom:16px;box-sizing:border-box">
+                    <label style="font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block">Server Icon</label>
+                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+                      <div class="dv-settings-icon" id="dvSettingsIcon">S</div>
+                      <button type="button" class="btn-secondary" id="dvUploadIconBtn">Upload Image</button>
+                      <input type="file" id="dvIconFileInput" accept="image/*" style="display:none">
+                    </div>
+                    <button class="btn-primary" id="dvSaveSettingsBtn">Save Changes</button>
+                  </div>
+                  <div id="dvSettingsRoles" style="display:none">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+                      <h3>Roles</h3>
+                      <button class="btn-primary" id="dvCreateRoleBtn" style="font-size:13px;padding:8px 16px">+ Create Role</button>
+                    </div>
+                    <div id="dvRolesList"></div>
+                    <div id="dvRoleEditor" style="display:none">
+                      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+                        <div style="display:flex;align-items:center;gap:10px">
+                          <div class="dv-role-dot" id="dvRoleEditorDot" style="background:#99aab5"></div>
+                          <input type="text" id="dvRoleNameInput" style="background:none;border:none;color:var(--text-1);font-size:18px;font-weight:700;outline:none" value="New Role">
+                        </div>
+                        <button class="btn-secondary" id="dvBackToRoles" style="font-size:13px">Back</button>
+                      </div>
+                      <label style="font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block">Role Color</label>
+                      <input type="color" id="dvRoleColorInput" value="#99aab5" style="width:60px;height:36px;border:none;background:none;cursor:pointer;margin-bottom:16px">
+                      <h4 style="font-size:14px;color:var(--text-1);margin-bottom:12px">Permissions</h4>
+                      <div id="dvPermissionsList"></div>
+                      <button class="btn-primary" id="dvSaveRoleBtn" style="margin-top:16px">Save Role</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="modal-close" onclick="closeModal('dvServerSettingsModal')">&times;</button>
+            </div>
+          </div>
+
+          <!-- Create Category Modal -->
+          <div id="dvCreateCategoryModal" class="modal-overlay">
+            <div class="modal-content" style="max-width:420px">
+              <h2>Create Category</h2>
+              <input type="text" id="dvCategoryNameInput" placeholder="Category name" style="width:100%;padding:10px 14px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text-1);font-size:14px;outline:none;margin:16px 0;box-sizing:border-box">
+              <div class="modal-actions"><button type="button" class="btn-secondary" onclick="closeModal('dvCreateCategoryModal')">Cancel</button><button type="button" class="btn-primary" id="dvConfirmCategoryBtn">Create</button></div>
+            </div>
+          </div>
+
+          <!-- Create Channel Modal -->
+          <div id="dvCreateChannelModal" class="modal-overlay">
+            <div class="modal-content" style="max-width:420px">
+              <h2>Create Channel</h2>
+              <label style="font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block">Channel Type</label>
+              <div style="display:flex;gap:8px;margin-bottom:16px">
+                <label class="dv-channel-type-option" style="flex:1;padding:12px;background:var(--bg-2);border:2px solid var(--border);border-radius:var(--r-sm);cursor:pointer;display:flex;align-items:center;gap:10px;transition:border-color 0.15s">
+                  <input type="radio" name="dvChannelType" value="text" checked style="accent-color:var(--accent)">
+                  <div><div style="font-size:14px;font-weight:600;color:var(--text-1)"># Text</div><div style="font-size:11px;color:var(--text-4)">Send messages, images, GIFs, emoji, and more</div></div>
+                </label>
+                <label class="dv-channel-type-option" style="flex:1;padding:12px;background:var(--bg-2);border:2px solid var(--border);border-radius:var(--r-sm);cursor:pointer;display:flex;align-items:center;gap:10px;transition:border-color 0.15s">
+                  <input type="radio" name="dvChannelType" value="voice" style="accent-color:var(--accent)">
+                  <div><div style="font-size:14px;font-weight:600;color:var(--text-1)">🔊 Voice</div><div style="font-size:11px;color:var(--text-4)">Hang out together with voice, video, and screen share</div></div>
+                </label>
+              </div>
+              <label style="font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block">Channel Name</label>
+              <input type="text" id="dvChannelNameInput" placeholder="new-channel" style="width:100%;padding:10px 14px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text-1);font-size:14px;outline:none;margin-bottom:16px;box-sizing:border-box">
+              <div class="modal-actions"><button type="button" class="btn-secondary" onclick="closeModal('dvCreateChannelModal')">Cancel</button><button type="button" class="btn-primary" id="dvConfirmChannelBtn">Create</button></div>
+            </div>
+          </div>
+
+          <!-- Member Profile Modal -->
+          <div id="dvMemberProfileModal" class="modal-overlay">
+            <div class="modal-content dv-member-profile">
+              <div class="dv-profile-banner"></div>
+              <div class="dv-profile-body">
+                <div class="dv-profile-avatar-lg" id="dvProfileAvatar">U</div>
+                <h3 id="dvProfileName">User</h3>
+                <p id="dvProfileTag" style="color:var(--text-4);font-size:13px;margin:0 0 16px">@user#0001</p>
+                <div class="dv-profile-roles" id="dvProfileRoles"></div>
+                <div class="dv-profile-actions" id="dvProfileActions"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ========== PROJECTS ========== -->
+          <div id="projectsSection" class="hidden">
+            <div class="projects-header">
+              <h1>Projects</h1>
+              <button class="btn-primary create-project-btn">
+                <span>Create New Project +</span>
+              </button>
+            </div>
+            <div id="projectList" class="project-list"></div>
+          </div>
+
+          <!-- ========== DEV ARENA ========== -->
+          <div id="arenaSection" class="hidden">
+            <div class="arena-header">
+              <h1>Dev Arena</h1>
+            </div>
+            <div id="totalScore" class="total-score"></div>
+            <div id="languageGrid" class="language-grid"></div>
+            <div id="arenaDetail" class="hidden">
+              <div id="arenaDetailHeader" class="arena-detail-header"></div>
+              <div id="questionList" class="questions-list"></div>
+            </div>
+          </div>
+
+          <!-- ========== DEVORA AI ========== -->
+          <div id="aiSection" class="hidden">
+            <div class="ai-chat-container">
+              <div class="ai-header">
+                <button class="ai-new-chat-btn" id="aiNewChatBtn" title="New Chat">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  <span>New Chat</span>
+                </button>
+                <div class="ai-header-actions">
+                  <div class="ai-status">
+                    <span class="ai-status-dot" id="aiStatusDot"></span>
+                    <span class="ai-status-text" id="aiStatusText">Connecting...</span>
+                  </div>
+                  <button class="ai-settings-btn" id="aiSettingsBtn" title="AI Settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="3"/>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- AI Settings Panel -->
+              <div class="ai-settings-panel" id="aiSettingsPanel">
+                <div class="ai-settings-content">
+                  <h3>AI Settings</h3>
+                  <p class="ai-settings-desc">Add your Hugging Face API key for better responses. Get a free key at <a href="https://huggingface.co/settings/tokens" target="_blank">huggingface.co</a></p>
+                  <div class="ai-settings-form">
+                    <input type="password" id="aiApiKey" placeholder="hf_xxxxxxxxxxxxxxxxxxxx" class="ai-api-input">
+                    <div class="ai-settings-actions">
+                      <button class="ai-settings-save" id="aiSaveKeyBtn">Save Key</button>
+                      <button class="ai-settings-clear" id="aiClearKeyBtn">Clear</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ai-messages" id="aiMessages">
+                <div class="ai-welcome">
+                  <div class="ai-welcome-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2a4 4 0 0 1 4 4v1a2 2 0 0 1 2 2h1a3 3 0 0 1 3 3v1a3 3 0 0 1-3 3h-1a2 2 0 0 1-2 2v1a4 4 0 0 1-8 0v-1a2 2 0 0 1-2-2h-1a3 3 0 0 1-3-3v-1a3 3 0 0 1 3-3h1a2 2 0 0 1 2-2V6a4 4 0 0 1 4-4z"/>
+                      <circle cx="9" cy="12" r="1" fill="currentColor"/>
+                      <circle cx="15" cy="12" r="1" fill="currentColor"/>
+                    </svg>
+                  </div>
+                  <h3>Hey, I'm Devora</h3>
+                  <p>Your AI companion. Ask me anything, tell me about your day, or just say hi.</p>
+                  <div class="ai-suggestions">
+                    <button class="ai-suggestion" data-msg="How's your day going?">How's your day going?</button>
+                    <button class="ai-suggestion" data-msg="Tell me something interesting">Tell me something interesting</button>
+                    <button class="ai-suggestion" data-msg="Recommend me a good movie">Recommend a movie</button>
+                    <button class="ai-suggestion" data-msg="I need some life advice">I need advice</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ai-input-area">
+                <div class="ai-input-wrapper">
+                  <textarea id="aiInput" placeholder="Message Devora AI..." rows="1"></textarea>
+                  <button class="ai-send-btn" id="aiSendBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="22" y1="2" x2="11" y2="13"/>
+                      <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                  </button>
+                </div>
+                <div class="ai-notice">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai-notice-icon">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <span>Devora AI is currently <strong>under development</strong> and may produce inaccurate or incomplete responses. We are actively working on improving its accuracy and capabilities.</span>
+                </div>
+                <div class="ai-footer">
+                  <p class="ai-credit">Developed by <strong>Firas</strong></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ========== VIP SCRIPTS ========== -->
+          <div id="vipSection" class="hidden">
+            <div class="vip-hero">
+              <div class="vip-hero-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+              </div>
+              <h1>VIP Scripts</h1>
+              <p>Exclusive scripts and resources for Devora VIP members</p>
+            </div>
+
+            <div class="vip-scripts-grid">
+
+              <div class="vip-script-card">
+                <div class="vip-script-icon vip-script-blue">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </div>
+                <div class="vip-script-info">
+                  <h3>Auto Portfolio Generator</h3>
+                  <p>Generate a professional developer portfolio from your GitHub profile automatically.</p>
+                  <span class="vip-script-tag">JavaScript</span>
+                </div>
+                <a href="javascript:void(0)" onclick="downloadScript('auto-portfolio')" class="vip-script-btn">Download Script</a>
+              </div>
+
+              <div class="vip-script-card">
+                <div class="vip-script-icon vip-script-green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div class="vip-script-info">
+                  <h3>Security Scanner Pro</h3>
+                  <p>Advanced web vulnerability scanner with automated reporting and threat detection.</p>
+                  <span class="vip-script-tag">Python</span>
+                </div>
+                <a href="javascript:void(0)" onclick="downloadScript('security-scanner')" class="vip-script-btn">Download Script</a>
+              </div>
+
+              <div class="vip-script-card">
+                <div class="vip-script-icon vip-script-purple">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <div class="vip-script-info">
+                  <h3>Network Monitor Dashboard</h3>
+                  <p>Real-time network monitoring with traffic analysis and alerts.</p>
+                  <span class="vip-script-tag">JavaScript</span>
+                </div>
+                <a href="javascript:void(0)" onclick="downloadScript('network-monitor')" class="vip-script-btn">Download Script</a>
+              </div>
+
+              <div class="vip-script-card">
+                <div class="vip-script-icon vip-script-orange">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="vip-script-info">
+                  <h3>API Rate Limiter</h3>
+                  <p>Production-ready rate limiting middleware for Node.js applications.</p>
+                  <span class="vip-script-tag">Node.js</span>
+                </div>
+                <a href="javascript:void(0)" onclick="downloadScript('api-rate-limiter')" class="vip-script-btn">Download Script</a>
+              </div>
+
+              <div class="vip-script-card">
+                <div class="vip-script-icon vip-script-rose">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                </div>
+                <div class="vip-script-info">
+                  <h3>Database Backup Tool</h3>
+                  <p>Automated database backup script with compression and cloud upload.</p>
+                  <span class="vip-script-tag">Python</span>
+                </div>
+                <a href="javascript:void(0)" onclick="downloadScript('db-backup')" class="vip-script-btn">Download Script</a>
+              </div>
+
+              <div class="vip-script-card">
+                <div class="vip-script-icon vip-script-cyan">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+                </div>
+                <div class="vip-script-info">
+                  <h3>Cloud Deploy Script</h3>
+                  <p>One-click deployment script for AWS, Azure, and Google Cloud.</p>
+                  <span class="vip-script-tag">Bash</span>
+                </div>
+                <a href="javascript:void(0)" onclick="downloadScript('cloud-deploy')" class="vip-script-btn">Download Script</a>
+              </div>
+
+              <div class="vip-script-card">
+                <div class="vip-script-icon vip-script-amber">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </div>
+                <div class="vip-script-info">
+                  <h3>CI/CD Pipeline Config</h3>
+                  <p>Ready-to-use GitHub Actions workflow for automated testing and deployment.</p>
+                  <span class="vip-script-tag">YAML</span>
+                </div>
+                <a href="javascript:void(0)" onclick="downloadScript('cicd-pipeline')" class="vip-script-btn">Download Script</a>
+              </div>
+
+              <div class="vip-script-card">
+                <div class="vip-script-icon vip-script-emerald">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="vip-script-info">
+                  <h3>User Auth System</h3>
+                  <p>Complete authentication system with JWT, OAuth, and role-based access control.</p>
+                  <span class="vip-script-tag">Node.js</span>
+                </div>
+                <a href="javascript:void(0)" onclick="downloadScript('user-auth')" class="vip-script-btn">Download Script</a>
+              </div>
+
+            </div>
+
+            <!-- FiveM Scripts Section -->
+            <div class="fivem-section">
+              <div class="fivem-header">
+                <div class="fivem-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                  </svg>
+                </div>
+                <h2>FiveM Scripts</h2>
+              </div>
+              <div class="fivem-coming-soon">
+                <div class="fivem-coming-soon-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                </div>
+                <h3>Coming Soon</h3>
+                <p>FiveM scripts and resources will be available here soon. Stay tuned for premium FiveM content!</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ========== CYBERSECURITY ========== -->
+          <div id="cyberSection" class="hidden">
+            <div class="cyber-hero">
+              <div class="cyber-hero-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </div>
+              <h1>Cybersecurity</h1>
+              <p>Comprehensive guide to cybersecurity concepts, practices, and technologies</p>
+            </div>
+
+            <div class="cyber-grid">
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-blue">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <h3>Cybersecurity</h3>
+                <p>The practice of protecting computers, networks, applications, systems, and data from unauthorized access, attacks, damage, or disruption.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-cyan">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <h3>Network Security</h3>
+                <p>The practice of protecting computer networks from unauthorized access, attacks, misuse, and security threats.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-purple">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+                <h3>Web Security</h3>
+                <p>The practice of protecting websites and web applications from vulnerabilities, attacks, and unauthorized access.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-orange">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
+                </div>
+                <h3>Linux Security</h3>
+                <p>The process of protecting Linux systems through secure configurations, access controls, updates, monitoring, and threat prevention.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </div>
+                <h3>Application Security</h3>
+                <p>The practice of identifying and fixing security vulnerabilities in software applications throughout their development and operation.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-red">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                </div>
+                <h3>Penetration Testing</h3>
+                <p>An authorized security assessment where testers simulate attacks against systems to identify and report vulnerabilities.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-yellow">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <h3>Vulnerability Assessment</h3>
+                <p>The process of identifying, analyzing, and prioritizing security weaknesses in systems, networks, or applications.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-teal">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3>Digital Forensics</h3>
+                <p>The process of collecting and analyzing digital evidence to investigate security incidents or other cyber-related events.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-indigo">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </div>
+                <h3>Security Analysis</h3>
+                <p>The process of examining systems, logs, networks, and security events to identify potential threats and vulnerabilities.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-rose">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <h3>Incident Response</h3>
+                <p>The organized process of detecting, investigating, containing, and recovering from cybersecurity incidents.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-emerald">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                </div>
+                <h3>Threat Intelligence</h3>
+                <p>The collection and analysis of information about cyber threats to help organizations understand and respond to potential attacks.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-amber">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <h3>Cryptography</h3>
+                <p>The use of mathematical techniques to protect information through encryption, decryption, authentication, and integrity mechanisms.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-sky">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+                </div>
+                <h3>Encryption</h3>
+                <p>The process of converting readable information into an encoded form that can only be accessed using the appropriate key.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-lime">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                </div>
+                <h3>Authentication</h3>
+                <p>The process of verifying the identity of a user, device, or system.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-violet">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                </div>
+                <h3>Authorization</h3>
+                <p>The process of determining what an authenticated user or system is allowed to access or perform.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-fuchsia">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <h3>Identity & Access Management</h3>
+                <p>A framework for managing digital identities and controlling access to systems and resources.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-lime">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <h3>Malware Analysis</h3>
+                <p>The process of examining malicious software to understand its behavior, capabilities, and potential impact.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-orange">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+                </div>
+                <h3>Firewall Security</h3>
+                <p>The use of firewalls to monitor and control network traffic according to defined security rules.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-cyan">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+                </div>
+                <h3>Cloud Security</h3>
+                <p>The practice of protecting cloud-based systems, applications, infrastructure, and data from security threats.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-teal">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                </div>
+                <h3>Mobile Security</h3>
+                <p>The practice of protecting mobile devices, applications, networks, and data from security threats.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-amber">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
+                </div>
+                <h3>Password Security</h3>
+                <p>The use of secure password practices and authentication mechanisms to prevent unauthorized account access.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-rose">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3>Ethical Hacking</h3>
+                <p>Authorized security testing performed to identify vulnerabilities and help improve the security of systems.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-blue">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                </div>
+                <h3>OSINT</h3>
+                <p>The process of collecting and analyzing information from publicly available sources for legitimate research or security purposes.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-indigo">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                </div>
+                <h3>Wireless Security</h3>
+                <p>The practice of protecting wireless networks and communications from unauthorized access and attacks.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-emerald">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <h3>System Security</h3>
+                <p>The practice of protecting operating systems, computers, and system resources against unauthorized access and threats.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-purple">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                </div>
+                <h3>Database Security</h3>
+                <p>The practice of protecting databases and their information from unauthorized access, modification, disclosure, or destruction.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-sky">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                </div>
+                <h3>API Security</h3>
+                <p>The practice of protecting APIs from unauthorized access, abuse, data exposure, and other security threats.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-violet">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <h3>Security Compliance</h3>
+                <p>The process of ensuring that an organization follows applicable security standards, policies, regulations, and requirements.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-red">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <h3>Zero Trust</h3>
+                <p>A security model based on the principle of continuously verifying users, devices, and access requests rather than automatically trusting them.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-rose">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                </div>
+                <h3>Red Team</h3>
+                <p>An authorized security team that simulates realistic attacks to test an organization's defenses.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-blue">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                </div>
+                <h3>Blue Team</h3>
+                <p>A security team responsible for defending systems, detecting threats, investigating incidents, and improving security controls.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-fuchsia">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
+                </div>
+                <h3>Purple Team</h3>
+                <p>A collaborative approach where offensive and defensive security teams work together to improve an organization's security.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-amber">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <h3>SOC</h3>
+                <p>A team or facility responsible for continuously monitoring systems, detecting threats, and responding to security incidents.</p>
+              </div>
+
+              <div class="cyber-card">
+                <div class="cyber-card-icon cyber-icon-emerald">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <h3>CTF</h3>
+                <p>A cybersecurity competition where participants solve security-related challenges to find hidden flags and demonstrate their skills.</p>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ========== DEVORA GAMES ========== -->
+          <div id="gamesSection" class="hidden">
+            <div class="games-hero">
+              <div class="games-hero-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="2" y="6" width="20" height="12" rx="2"/>
+                  <line x1="6" y1="10" x2="6" y2="14"/>
+                  <line x1="4" y1="12" x2="8" y2="12"/>
+                  <circle cx="15" cy="11" r="1" fill="currentColor"/>
+                  <circle cx="17" cy="13" r="1" fill="currentColor"/>
+                </svg>
+              </div>
+              <h1>Devora Games</h1>
+              <p>Choose a game and start playing!</p>
+            </div>
+            <div class="games-grid">
+              <div class="game-card" onclick="startGame('snake')">
+                <div class="game-card-badge game-badge-classic">Classic</div>
+                <div class="game-card-icon game-icon-green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v4H4z"/><circle cx="18" cy="18" r="3"/></svg>
+                </div>
+                <h3>Snake</h3>
+                <p>Classic arcade experience. Guide the snake, collect food, and grow without hitting walls or yourself.</p>
+                <div class="game-card-tags"><span class="game-tag">Arcade</span><span class="game-tag">Strategy</span></div>
+              </div>
+              <div class="game-card" onclick="startGame('aim')">
+                <div class="game-card-badge game-badge-popular">Popular</div>
+                <div class="game-card-icon game-icon-red">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                </div>
+                <h3>Aim Trainer</h3>
+                <p>Test and improve your reflexes. Hit targets before they disappear. 30 seconds on the clock.</p>
+                <div class="game-card-tags"><span class="game-tag">Reflexes</span><span class="game-tag">Precision</span></div>
+              </div>
+              <div class="game-card game-card-dev" onclick="startGame('fight')">
+                <div class="game-card-badge game-badge-dev">In Development</div>
+                <div class="game-card-icon game-icon-orange">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <h3>Devora Fight</h3>
+                <p>First-person shooter with raycasting engine. We are actively improving gameplay, visuals, and performance to deliver one of the best designs.</p>
+                <div class="game-card-tags"><span class="game-tag">FPS</span><span class="game-tag">Action</span><span class="game-tag game-tag-wip">WIP</span></div>
+              </div>
+            </div>
+            <div id="gameContainer" class="game-container hidden">
+              <div class="game-header">
+                <h2 id="gameTitle"></h2>
+                <div class="game-info">
+                  <span id="gameScore">Score: 0</span>
+                </div>
+                <button class="game-close-btn" onclick="closeGame()">X Close</button>
+              </div>
+              <canvas id="gameCanvas"></canvas>
+              <div id="gameOverlay" class="game-overlay hidden">
+                <div class="game-overlay-content">
+                  <h2 id="overlayTitle"></h2>
+                  <p id="overlayMessage"></p>
+                  <button id="overlayBtn" class="game-play-btn" onclick="restartGame()">Play Again</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ========== SUGGESTIONS ========== -->
+          <div id="suggestionsSection" class="hidden">
+            <div class="suggestions-header">
+              <h1>Suggestions</h1>
+              <p>Share your ideas and feedback with the community</p>
+            </div>
+            <button class="btn-primary create-suggestion-btn" id="createSuggestionBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Create Your Suggestion
+            </button>
+            <div id="suggestionsList" class="suggestions-list"></div>
+            <div id="suggestionsEmpty" class="suggestions-empty">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <h3>No suggestions yet</h3>
+              <p>Be the first to share your thoughts!</p>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- VIP Modal -->
+  <div id="vipModal" class="modal-overlay">
+    <div class="modal-content vip-modal-content">
+      <button class="modal-close" onclick="closeModal('vipModal')">&times;</button>
+      <div class="vip-modal-header">
+        <div class="vip-modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <h2>Get Devora VIP</h2>
+        <p>Unlock exclusive features and premium content</p>
+      </div>
+
+      <div class="vip-plans">
+        <div class="vip-plan" id="vipPlanMonthly">
+          <div class="vip-plan-badge">Popular</div>
+          <h3>Monthly</h3>
+          <div class="vip-plan-price">$4.99<span>/mo</span></div>
+          <ul class="vip-plan-features">
+            <li>✓ All VIP Scripts</li>
+            <li>✓ Premium Tutorials</li>
+            <li>✓ Priority Support</li>
+            <li>✓ Monthly Updates</li>
+          </ul>
+          <button class="vip-plan-btn" onclick="selectVipPlan('monthly')">Select Plan</button>
+        </div>
+
+        <div class="vip-plan vip-plan-featured" id="vipPlanYearly">
+          <div class="vip-plan-badge best-value">Best Value</div>
+          <h3>Yearly</h3>
+          <div class="vip-plan-price">$50.99<span>/yr</span></div>
+          <div class="vip-plan-save">Save $8.89/year</div>
+          <ul class="vip-plan-features">
+            <li>✓ All VIP Scripts</li>
+            <li>✓ Premium Tutorials</li>
+            <li>✓ Priority Support</li>
+            <li>✓ Yearly Updates</li>
+            <li>✓ Exclusive Content</li>
+          </ul>
+          <button class="vip-plan-btn" onclick="selectVipPlan('yearly')">Select Plan</button>
+        </div>
+      </div>
+
+      <div class="vip-payment-notice">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span>Secure payment processed via PayPal. Your payment information is encrypted and never stored on our servers.</span>
+      </div>
+
+      <div class="vip-paypal-section">
+        <p class="vip-paypal-text">You will be redirected to PayPal to complete your purchase securely.</p>
+        <a href="https://www.paypal.com" target="_blank" rel="noopener noreferrer" class="vip-paypal-btn" id="vipPaypalBtn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.405 7.201-9.162 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/>
+          </svg>
+          Pay with PayPal
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script Modal -->
+  <div id="scriptModal" class="modal-overlay">
+    <div class="modal-content script-modal-content">
+      <button class="modal-close" onclick="closeModal('scriptModal')">&times;</button>
+      <div class="script-modal-header">
+        <div class="script-modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <h2 id="scriptModalName">script.js</h2>
+      </div>
+      <div class="script-modal-body">
+        <p class="script-modal-info">Copy the code below and save it as a file on your computer. The script is licensed to your account only.</p>
+        <div class="script-code-wrapper">
+          <pre id="scriptCodeContent" class="script-code-block"></pre>
+        </div>
+      </div>
+      <div class="script-modal-actions">
+        <button class="script-copy-btn" onclick="copyScriptCode()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Code
+        </button>
+        <button class="script-save-btn" onclick="saveScriptFile()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download File
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Project Modal -->
+  <div id="createProjectModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('createProjectModal')">&times;</button>
+      <h2>Create New Project</h2>
+      <form id="createProjectForm">
+        <div class="form-group">
+          <label for="project-title">Title Project *</label>
+          <input type="text" id="project-title" placeholder="Enter project title" required>
+        </div>
+        <div class="form-group">
+          <label for="project-description">Description *</label>
+          <textarea id="project-description" placeholder="Describe your project" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Project Languages</label>
+          <div class="language-checkboxes" id="languageCheckboxes">
+            <label class="checkbox-item"><input type="checkbox" value="Python"> Python</label>
+            <label class="checkbox-item"><input type="checkbox" value="Java"> Java</label>
+            <label class="checkbox-item"><input type="checkbox" value="JavaScript"> JavaScript</label>
+            <label class="checkbox-item"><input type="checkbox" value="HTML"> HTML</label>
+            <label class="checkbox-item"><input type="checkbox" value="CSS"> CSS</label>
+            <label class="checkbox-item"><input type="checkbox" value="PHP"> PHP</label>
+            <label class="checkbox-item"><input type="checkbox" value="C"> C</label>
+            <label class="checkbox-item"><input type="checkbox" value="C++"> C++</label>
+            <label class="checkbox-item"><input type="checkbox" value="C#"> C#</label>
+            <label class="checkbox-item"><input type="checkbox" value="Rust"> Rust</label>
+            <label class="checkbox-item"><input type="checkbox" value="Go"> Go</label>
+            <label class="checkbox-item"><input type="checkbox" value="Kotlin"> Kotlin</label>
+            <label class="checkbox-item"><input type="checkbox" value="Swift"> Swift</label>
+            <label class="checkbox-item"><input type="checkbox" value="TypeScript"> TypeScript</label>
+            <label class="checkbox-item"><input type="checkbox" value="Ruby"> Ruby</label>
+            <label class="checkbox-item"><input type="checkbox" value="Dart"> Dart</label>
+            <label class="checkbox-item"><input type="checkbox" value="R"> R</label>
+            <label class="checkbox-item"><input type="checkbox" value="Scala"> Scala</label>
+            <label class="checkbox-item"><input type="checkbox" value="Lua"> Lua</label>
+            <label class="checkbox-item"><input type="checkbox" value="Solidity"> Solidity</label>
+            <label class="checkbox-item"><input type="checkbox" value="SQL"> SQL</label>
+            <label class="checkbox-item"><input type="checkbox" value="Assembly"> Assembly</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="project-image">Link Images</label>
+          <input type="url" id="project-image" placeholder="https://example.com/image.png">
+        </div>
+        <div class="form-group">
+          <label for="project-github">Link GitHub</label>
+          <input type="url" id="project-github" placeholder="https://github.com/username/repo">
+        </div>
+        <div class="form-group">
+          <label for="project-other">Other Link</label>
+          <input type="url" id="project-other" placeholder="https://example.com">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary btn-cancel" id="btnCancelCreate">Cancel</button>
+          <button type="button" class="btn-primary" id="btnSaveProject">Create Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Profile Modal (View) -->
+  <div id="profileModal" class="modal-overlay">
+    <div class="profile-modal-content">
+      <button class="modal-close" onclick="closeModal('profileModal')">&times;</button>
+      <div class="profile-header">
+        <div class="profile-avatar-lg" id="profileAvatarLg">D</div>
+        <div class="profile-display-name" id="profile-name">Name</div>
+        <span class="vip-badge-view" id="profileVipBadge" style="display:none" title="Devora VIP">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </span>
+        <div class="profile-username" id="profile-username">@username</div>
+      </div>
+      <div class="profile-section">
+        <h4>Description</h4>
+        <p id="profile-description">Not set</p>
+      </div>
+      <div class="profile-section">
+        <h4>Bio</h4>
+        <p id="profile-bio">Not set</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeModal('profileModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div id="editProfileModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('editProfileModal')">&times;</button>
+      <h2>Edit Profile</h2>
+      <form id="editProfileForm">
+        <div class="form-group">
+          <label for="edit-username">Username</label>
+          <input type="text" id="edit-username" placeholder="e.g. ahmed_lolo">
+          <span class="field-hint">Lowercase letters, numbers, and underscores only.</span>
+        </div>
+        <div class="form-group">
+          <label for="edit-name">Name</label>
+          <input type="text" id="edit-name" placeholder="Your display name">
+        </div>
+        <div class="form-group">
+          <label for="edit-description">Description</label>
+          <textarea id="edit-description" placeholder="Write something about yourself..." rows="3" maxlength="800"></textarea>
+          <span class="field-hint">Max 800 characters.</span>
+        </div>
+        <div class="form-group">
+          <label for="edit-bio">Bio</label>
+          <textarea id="edit-bio" placeholder="Write your bio..." rows="3" maxlength="800"></textarea>
+          <span class="field-hint">Max 800 characters.</span>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary btn-cancel">Cancel</button>
+          <button type="button" class="btn-primary btn-save">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Question Modal (Arena) -->
+  <div id="questionModal" class="modal-overlay code-modal"></div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteConfirmModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 420px; text-align: center;">
+      <h2>Confirm Delete</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">Are you sure you want to delete this project? This action cannot be undone.</p>
+      <div class="modal-actions" style="justify-content: center;">
+        <button type="button" class="btn-secondary btn-cancel-delete">Cancel</button>
+        <button type="button" class="btn-danger btn-confirm-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Author Profile Modal -->
+  <div id="authorModal" class="modal-overlay">
+    <div class="profile-modal-content">
+      <button class="modal-close">&times;</button>
+      <div class="profile-header">
+        <img id="authorModalAvatar" src="" alt="" class="profile-avatar-img">
+        <div class="profile-display-name" id="authorModalName"></div>
+        <span class="vip-badge-view" id="authorVipBadge" style="display:none" title="Devora VIP">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </span>
+        <div class="profile-username" id="authorModalUsername"></div>
+      </div>
+      <div class="profile-section">
+        <h4>Email</h4>
+        <p id="authorModalEmail"></p>
+      </div>
+      <div class="profile-section">
+        <h4>Description</h4>
+        <p id="authorModalDescription">Not set</p>
+      </div>
+      <div class="profile-section">
+        <h4>Bio</h4>
+        <p id="authorModalBio">Not set</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary btn-close-author">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Suggestion Modal -->
+  <div id="suggestionModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('suggestionModal')">&times;</button>
+      <h2>Create Your Suggestion</h2>
+      <form id="suggestionForm">
+        <div class="form-group">
+          <label for="suggestion-title">Title *</label>
+          <input type="text" id="suggestion-title" placeholder="Enter suggestion title" required maxlength="100">
+        </div>
+        <div class="form-group">
+          <label for="suggestion-body">Write The Suggestion *</label>
+          <textarea id="suggestion-body" placeholder="Describe your suggestion in detail..." rows="6" required maxlength="2000"></textarea>
+          <span class="field-hint">Max 2000 characters.</span>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeModal('suggestionModal')">Cancel</button>
+          <button type="submit" class="btn-primary">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Suggestion Confirm Modal -->
+  <div id="deleteSuggestionModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 420px; text-align: center;">
+      <h2>Delete Suggestion</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">Are you sure you want to delete this suggestion? This action cannot be undone.</p>
+      <div class="modal-actions" style="justify-content: center;">
+        <button type="button" class="btn-secondary" onclick="closeModal('deleteSuggestionModal')">Cancel</button>
+        <button type="button" class="btn-danger" id="confirmDeleteSuggestionBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Password Modal -->
+  <div id="adminPasswordModal" class="modal-overlay">
+    <div class="modal-content admin-pass-modal">
+      <div class="admin-pass-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="32" height="32">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <h2>Write The Admin Password</h2>
+      <p style="color: var(--text-3); margin-bottom: 20px; font-size: 14px;">Enter the admin password to gain access to the Management panel.</p>
+      <form id="adminPassForm" autocomplete="off">
+        <div class="admin-pass-input-wrap">
+          <input type="password" id="adminPassInput" placeholder="Enter password..." autocomplete="off">
+          <button type="button" class="admin-pass-toggle" id="adminPassToggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <p class="admin-pass-error" id="adminPassError" style="display:none">Incorrect password. Try again.</p>
+        <div class="modal-actions" style="justify-content: center; gap: 10px;">
+          <button type="button" class="btn-secondary" onclick="closeModal('adminPasswordModal')">Cancel</button>
+          <button type="submit" class="btn-primary">Confirm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Kick Admin Confirm Modal -->
+  <div id="kickAdminModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 420px; text-align: center;">
+      <div style="margin-bottom: 16px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="40" height="40" style="color: var(--error);">
+          <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+        </svg>
+      </div>
+      <h2>Kick Admin</h2>
+      <p style="color: var(--text-3); margin-bottom: 8px;">Are you sure you want to kick <strong id="kickAdminName"></strong> from Admin?</p>
+      <p style="color: var(--text-4); font-size: 13px; margin-bottom: 24px;">Their Admin role will be removed. They can re-enter the password to regain access.</p>
+      <div class="modal-actions" style="justify-content: center; gap: 10px;">
+        <button type="button" class="btn-secondary" onclick="closeModal('kickAdminModal')">Cancel</button>
+        <button type="button" class="btn-danger" id="confirmKickAdminBtn">Kick</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Remove VIP Confirm Modal -->
+  <div id="removeVipModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 420px; text-align: center;">
+      <div style="margin-bottom: 16px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="40" height="40" style="color: var(--error);">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      </div>
+      <h2>Remove VIP</h2>
+      <p style="color: var(--text-3); margin-bottom: 8px;">Are you sure you want to remove VIP from <strong id="removeVipName"></strong>?</p>
+      <p style="color: var(--text-4); font-size: 13px; margin-bottom: 24px;">Their VIP access will be revoked immediately.</p>
+      <div class="modal-actions" style="justify-content: center; gap: 10px;">
+        <button type="button" class="btn-secondary" onclick="closeModal('removeVipModal')">Cancel</button>
+        <button type="button" class="btn-danger" id="confirmRemoveVipBtn">Remove VIP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS FILES -->
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/arena.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/games.js"></script>
+  <script src="js/suggestions.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/messenger.js"></script>
+  <script src="js/disvora.js"></script>
+  <link rel="preload" href="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js" as="script" crossorigin="anonymous">
+
+  <!-- Additional App Script for hamburger, nav titles -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Hamburger menu
+      var hamburger = document.getElementById('hamburgerBtn');
+      var sidebar = document.getElementById('sidebar');
+      var overlay = document.getElementById('sidebarOverlay');
+      if (hamburger) {
+        hamburger.addEventListener('click', function() {
+          sidebar.classList.toggle('open');
+          overlay.classList.toggle('active');
+        });
+      }
+      if (overlay) {
+        overlay.addEventListener('click', function() {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+        });
+      }
+
+      // Nav title update
+      var navItems = document.querySelectorAll('.nav-item[data-section]');
+      var topbarTitle = document.getElementById('topbarTitle');
+      var titles = { dashboard: 'Dashboard', projects: 'Projects', arena: 'Dev Arena', ai: 'Devora AI', messenger: 'Mess Devora', disvora: 'Disvora', cyber: 'Cybersecurity', games: 'Devora Games', suggestions: 'Suggestions', management: 'Management' };
+      navItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+          var section = item.getAttribute('data-section');
+          if (topbarTitle) topbarTitle.textContent = titles[section] || section;
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+        });
+      });
+    });
+  </script>
+
+  <!-- CUSTOM CURSOR SCRIPT -->
+  <script>
+    (function() {
+      var dot = document.getElementById('cursorDot');
+      var ring = document.getElementById('cursorRing');
+      if (!dot || !ring) return;
+
+      var mouseX = 0, mouseY = 0;
+      var ringX = 0, ringY = 0;
+      var visible = false;
+
+      document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        dot.style.left = mouseX + 'px';
+        dot.style.top = mouseY + 'px';
+        if (!visible) {
+          visible = true;
+          dot.style.opacity = '1';
+          ring.style.opacity = '1';
+        }
+      });
+
+      document.addEventListener('mouseleave', function() {
+        visible = false;
+        dot.style.opacity = '0';
+        ring.style.opacity = '0';
+      });
+
+      document.addEventListener('mouseenter', function() {
+        visible = true;
+        dot.style.opacity = '1';
+        ring.style.opacity = '1';
+      });
+
+      function animateRing() {
+        ringX += (mouseX - ringX) * 1;
+        ringY += (mouseY - ringY) * 1;
+        ring.style.left = ringX + 'px';
+        ring.style.top = ringY + 'px';
+        requestAnimationFrame(animateRing);
+      }
+      animateRing();
+
+      var hoverEls = 'a, button, .nav-item, .project-card, .lang-card, .language-card, .question-item, .discord-btn, .btn-primary, .btn-secondary, .btn-danger, .profile-trigger, .create-project-btn, .modal-close, .back-btn, .run-btn, .start-btn, .question-start-btn, .project-author, .checkbox-item, .game-card, .game-play-btn, .game-close-btn, input, textarea, select, [data-action]';
+
+      document.addEventListener('mouseover', function(e) {
+        var t = e.target.closest(hoverEls);
+        if (t) {
+          ring.classList.add('cursor-hover');
+          dot.classList.add('cursor-hover');
+          if (t.closest('a') || t.closest('button') || t.closest('[data-action]') || t.classList.contains('btn-primary') || t.classList.contains('btn-secondary') || t.classList.contains('btn-danger') || t.classList.contains('discord-btn') || t.classList.contains('run-btn') || t.classList.contains('start-btn') || t.classList.contains('question-start-btn')) {
+            ring.classList.add('cursor-pointer');
+            dot.classList.add('cursor-pointer');
+          }
+          if (t.classList.contains('project-card') || t.classList.contains('lang-card') || t.classList.contains('language-card')) {
+            ring.classList.add('cursor-card');
+            dot.classList.add('cursor-card');
+          }
+        }
+      });
+
+      document.addEventListener('mouseout', function(e) {
+        var t = e.target.closest(hoverEls);
+        if (t) {
+          ring.classList.remove('cursor-hover', 'cursor-pointer', 'cursor-card');
+          dot.classList.remove('cursor-hover', 'cursor-pointer', 'cursor-card');
+        }
+      });
+
+      document.addEventListener('mousedown', function() {
+        ring.classList.add('cursor-active');
+        dot.classList.add('cursor-active');
+      });
+
+      document.addEventListener('mouseup', function() {
+        ring.classList.remove('cursor-active');
+        dot.classList.remove('cursor-active');
+      });
+    })();
+  </script>
+
+  <script>
+    (function() {
+      var canvas = document.getElementById('starsCanvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var stars = [];
+      var STAR_COUNT = 120;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function createStars() {
+        stars = [];
+        for (var i = 0; i < STAR_COUNT; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5 + 0.3,
+            alpha: Math.random() * 0.8 + 0.2,
+            speed: Math.random() * 0.3 + 0.05,
+            twinkle: Math.random() * 0.02 + 0.005,
+            phase: Math.random() * Math.PI * 2
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        var t = Date.now() * 0.001;
+        for (var i = 0; i < stars.length; i++) {
+          var s = stars[i];
+          s.y -= s.speed;
+          if (s.y < -5) { s.y = canvas.height + 5; s.x = Math.random() * canvas.width; }
+          var flicker = Math.sin(t * s.twinkle * 60 + s.phase) * 0.3 + 0.7;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(180, 200, 255, ' + (s.alpha * flicker) + ')';
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      createStars();
+      draw();
+      window.addEventListener('resize', function() { resize(); createStars(); });
+    })();
+
+    /* ── 3D Tilt Effect ────────────────────────────── */
+    (function() {
+      var tiltCards = document.querySelectorAll('.welcome-card, .feature-card, .vip-card-dashboard, .mgt-stat-card, .game-card, .suggestion-card');
+      var MAX_TILT = 5;
+
+      tiltCards.forEach(function(card) {
+        var shine = document.createElement('div');
+        shine.className = 'tilt-shine';
+        card.appendChild(shine);
+        card.style.transformStyle = 'preserve-3d';
+        card.style.willChange = 'transform';
+        var ticking = false;
+        var lastX = 0, lastY = 0;
+
+        card.addEventListener('mousemove', function(e) {
+          var rect = card.getBoundingClientRect();
+          lastX = e.clientX - rect.left;
+          lastY = e.clientY - rect.top;
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(function() {
+              var x = lastX, y = lastY;
+              var w = rect.width;
+              var h = rect.height;
+              var xPct = (x / w - 0.5) * 2;
+              var yPct = (y / h - 0.5) * 2;
+              var rotateY = xPct * MAX_TILT;
+              var rotateX = -yPct * MAX_TILT;
+              card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.015, 1.015, 1.015)';
+              var shineX = (x / w) * 100;
+              var shineY = (y / h) * 100;
+              shine.style.background = 'radial-gradient(circle at ' + shineX + '% ' + shineY + '%, rgba(255,255,255,0.05) 0%, transparent 55%)';
+              shine.style.opacity = '1';
+              ticking = false;
+            });
+          }
+        });
+
+        card.addEventListener('mouseleave', function() {
+          card.style.transition = 'transform 0.7s cubic-bezier(0.23, 1, 0.32, 1)';
+          card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+          shine.style.opacity = '0';
+          setTimeout(function() { card.style.transition = ''; }, 700);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
